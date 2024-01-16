@@ -1,6 +1,7 @@
 module Main where
 
-import qualified Lib (someFunc)
+import Options.Applicative
+import Lib
 
 main :: IO ()
 main = do

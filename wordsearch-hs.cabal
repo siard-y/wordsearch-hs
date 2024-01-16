@@ -93,6 +93,7 @@ executable wordsearch-hs
     -- Other library packages from which modules are imported.
     build-depends:
         base ^>=4.17.2.1,
+        optparse-applicative >=0.18.1.0,
         wordsearch-hs
 
     -- Directories containing source files.
