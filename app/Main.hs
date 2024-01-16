@@ -21,7 +21,14 @@ fileInput = FileInput
           <> help "Word search word list file" )
 
 run :: FileInput -> IO ()
-run options = putStrLn "placeholder"
+run options = do
+  wordsStr <- readFile $ wordsFile options
+  gridOrError <- gridFromFile $ gridFile options
+  case gridOrError of
+    Right grid -> do
+      print grid
+    Left err -> error $ show err
+  putStrLn $ "Words: \n " ++ wordsStr
 
 main :: IO ()
 main = run =<< execParser opts
