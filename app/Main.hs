@@ -20,6 +20,20 @@ fileInput = FileInput
           <> metavar "WORDS_FILE"
           <> help "Word search word list file" )
 
+gridFromFile :: FilePath -> IO (Either GridParseError Grid)
+gridFromFile filePath = do
+  fileContents <- readFile filePath
+  let fileLines = lines fileContents
+  return $ case fileLines of
+    [] -> Left GridEmpty
+    (firstLine : restLines) ->
+      let width = length firstLine
+          isValidLine l = length l == width
+      in if all isValidLine restLines
+           then Right $ Grid { letters = concat fileLines, width, height = length fileLines }
+           else Left InconsistentLineLengths
+
+
 run :: FileInput -> IO ()
 run options = do
   wordsStr <- readFile $ wordsFile options
