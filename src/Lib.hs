@@ -1,5 +1,7 @@
 module Lib where
 
+import Data.List (elemIndices)
+
 data GridParseError
   = GridEmpty
   | InconsistentLineLengths
@@ -40,3 +42,15 @@ getCoordsBetween (x1, y1) (x2, y2) = zip xs ys
       | abs (y2 - y1) == 0 = ([x1, x1 + signum (x2 - x1) .. x2], repeat y1)
       | otherwise = ([x1, x1 + signum (x2 - x1) .. x2], [y1, y1 + signum (y2 - y1) .. y2])
 
+
+findWord :: Grid -> String -> (String, [Coord])
+findWord grid@(Grid letters _ _) word =
+  let filtered = elemIndices (head word) letters
+      outerLettersIndices = [((x, letters !! x), getNthNeighbors grid x (length word)) | x <- filtered]
+      -- outerLetters = map (second (map (letters !!))) outerLettersIndices
+      outerLetters = map (\(i, o) -> (i, (o, map (letters !!) o))) outerLettersIndices
+      -- lll = map (second (filter (== last word))) outerLetters
+      lll = map (\(i, (oi, oc)) -> (i, (oi, filter (== last word) oc))) outerLetters
+      nnnn = map (\((ii, ij), (oi, oc)) -> ((getCoord grid ii, ij), (map (getCoord grid) oi, oc))) lll
+      coordsBetween = map (\((icrd, ichr), (oi, ocs)) -> ((icrd, ichr), (map (getCoordsBetween icrd) oi, ocs))) nnnn
+  in [ HELP AAAAAAA | ((a, b), (c, d)) <- coordsBetween]
