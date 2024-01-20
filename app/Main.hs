@@ -33,7 +33,6 @@ gridFromFile filePath = do
            then Right $ Grid { letters = concat fileLines, width, height = length fileLines }
            else Left InconsistentLineLengths
 
-
 run :: FileInput -> IO ()
 run options = do
   wordsStr <- readFile $ wordsFile options

@@ -42,7 +42,6 @@ getCoordsBetween (x1, y1) (x2, y2) = zip xs ys
       | abs (y2 - y1) == 0 = ([x1, x1 + signum (x2 - x1) .. x2], repeat y1)
       | otherwise = ([x1, x1 + signum (x2 - x1) .. x2], [y1, y1 + signum (y2 - y1) .. y2])
 
-
 findWord :: Grid -> String -> (String, [Coord])
 findWord grid@(Grid letters _ _) word =
   let outerCoords index = (getCoord grid <$> getNthNeighbors grid index (length word), getCoord grid index)
