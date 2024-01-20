@@ -1,6 +1,6 @@
 module Lib where
 
-import Data.List (elemIndices, find)
+import Data.List (elemIndices)
 
 data GridParseError
   = GridEmpty
@@ -47,6 +47,5 @@ findWord grid@(Grid letters _ _) word =
   let outerCoords index = (getCoord grid <$> getNthNeighbors grid index (length word), getCoord grid index)
       coordsBetween = concatMap ((\(o, c) -> getCoordsBetween c <$> o) . outerCoords) $ elemIndices (head word) letters
       wordsFromCoords = ((\coord -> letters !! getIndex grid coord) <$>) <$> coordsBetween
-  in case find (\(w, _) -> w == word) (zip wordsFromCoords coordsBetween) of
-    Just (foundWord, foundCoords) -> (foundWord, foundCoords)
-    Nothing -> ("", [(0, 0)])
+  in maybe ("", [(0, 0)]) 
+           (word,) $ lookup word (zip wordsFromCoords coordsBetween)
