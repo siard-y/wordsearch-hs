@@ -16,16 +16,16 @@ data Grid = Grid
   } deriving (Show)
 
 getCoord :: Grid -> Int -> Coord
-getCoord grid index = (index `mod` width grid, index `div` width grid)
+getCoord (Grid _ w _) index = (index `mod` w, index `div` w)
 
 getIndex :: Grid -> Coord -> Int
-getIndex grid (x, y) = x + width grid * y
+getIndex (Grid _ w _) (x, y) = x + w * y
 
 getCharOnIndex :: Grid -> Int -> Char
-getCharOnIndex grid i = letters grid !! i
+getCharOnIndex (Grid letters _ _) i = letters !! i
 
 coordInBounds :: Grid -> Coord -> Bool
-coordInBounds grid (x, y) = x >= 0 && y >= 0 && x < width grid && y < height grid
+coordInBounds (Grid _ w h) (x, y) = x >= 0 && y >= 0 && x < w && y < h
 
 getNthNeighbors :: Grid -> Int -> Int -> [Int]
 getNthNeighbors grid i n' =
