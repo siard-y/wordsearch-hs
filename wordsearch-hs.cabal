@@ -23,11 +23,11 @@ name:               wordsearch-hs
 version:            0.1.0.0
 
 -- A short (one-line) description of the package.
-synopsis:          Takes a list of words and a word search grid, outputs the words and their locations.
+synopsis:          Solves word search puzzles.
 
 
 -- A longer description of the package.
--- description:
+description:       Outputs the coordinates of the given words from a given text grid.
 
 -- The license under which the package is released.
 license:            GPL-3.0-only
@@ -48,6 +48,11 @@ build-type:         Simple
 
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files:    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/siard-y/wordsearch-hs.git
+  branch: main
 
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
 -- extra-source-files:
@@ -93,7 +98,7 @@ executable wordsearch-hs
     -- Other library packages from which modules are imported.
     build-depends:
         base ^>=4.17.2.1,
-        optparse-applicative >=0.18.1.0,
+        optparse-applicative >= 0.18.1 && < 0.19,
         wordsearch-hs
 
     -- Directories containing source files.
