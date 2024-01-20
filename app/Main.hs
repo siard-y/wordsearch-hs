@@ -39,10 +39,11 @@ run options = do
   wordsStr <- readFile $ wordsFile options
   gridOrError <- gridFromFile $ gridFile options
   case gridOrError of
-    Right grid -> do
-      print grid
+    Right grid -> mapM_ printResult $ findWord grid <$> lines wordsStr
     Left err -> error $ show err
-  putStrLn $ "Words: \n " ++ wordsStr
+
+printResult :: (String, [Coord]) -> IO ()
+printResult (word, coords) = putStrLn $ word ++ " at " ++ show coords
 
 main :: IO ()
 main = run =<< execParser opts
@@ -51,4 +52,3 @@ main = run =<< execParser opts
       ( fullDesc
      <> progDesc "Find words in a word search puzzle"
      <> header "Word search puzzle solver" )
-     

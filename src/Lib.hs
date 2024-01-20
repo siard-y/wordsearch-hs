@@ -1,6 +1,6 @@
 module Lib where
 
-import Data.List (elemIndices)
+import Data.List (elemIndices, find)
 
 data GridParseError
   = GridEmpty
@@ -45,12 +45,9 @@ getCoordsBetween (x1, y1) (x2, y2) = zip xs ys
 
 findWord :: Grid -> String -> (String, [Coord])
 findWord grid@(Grid letters _ _) word =
-  let filtered = elemIndices (head word) letters
-      outerLettersIndices = [((x, letters !! x), getNthNeighbors grid x (length word)) | x <- filtered]
-      -- outerLetters = map (second (map (letters !!))) outerLettersIndices
-      outerLetters = map (\(i, o) -> (i, (o, map (letters !!) o))) outerLettersIndices
-      -- lll = map (second (filter (== last word))) outerLetters
-      lll = map (\(i, (oi, oc)) -> (i, (oi, filter (== last word) oc))) outerLetters
-      nnnn = map (\((ii, ij), (oi, oc)) -> ((getCoord grid ii, ij), (map (getCoord grid) oi, oc))) lll
-      coordsBetween = map (\((icrd, ichr), (oi, ocs)) -> ((icrd, ichr), (map (getCoordsBetween icrd) oi, ocs))) nnnn
-  in [ HELP AAAAAAA | ((a, b), (c, d)) <- coordsBetween]
+  let outerCoords index = (getCoord grid <$> getNthNeighbors grid index (length word), getCoord grid index)
+      coordsBetween = concatMap ((\(o, c) -> getCoordsBetween c <$> o) . outerCoords) $ elemIndices (head word) letters
+      wordsFromCoords = ((\coord -> letters !! getIndex grid coord) <$>) <$> coordsBetween
+  in case find (\(w, _) -> w == word) (zip wordsFromCoords coordsBetween) of
+    Just (foundWord, foundCoords) -> (foundWord, foundCoords)
+    Nothing -> ("", [(0, 0)])
