@@ -21,9 +21,6 @@ getCoord (Grid _ w _) index = (index `mod` w, index `div` w)
 getIndex :: Grid -> Coord -> Int
 getIndex (Grid _ w _) (x, y) = x + w * y
 
-getCharOnIndex :: Grid -> Int -> Char
-getCharOnIndex (Grid letters _ _) i = letters !! i
-
 coordInBounds :: Grid -> Coord -> Bool
 coordInBounds (Grid _ w h) (x, y) = x >= 0 && y >= 0 && x < w && y < h
 
